@@ -66,15 +66,14 @@ class BaseDeDatos
 
 
 $db = new BaseDeDatos();
-var_dump($db); die;
 
 $db->insert(1, "amir");
 $db->insert(2, "pepe");
+$db->insert(6, "JOSE");
 $db->insert(3, "123123123");
 $db->insert(4, "asdasd");
 $db->update(1, "sd");
 $db->update(2, "1010");
 $db->delete(1, "1010");
 $db->insert(5, "hola");
-echo $db->get(4)."\n";
 

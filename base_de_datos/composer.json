@@ -1,0 +1,12 @@
+{
+    "name": "ahuespi/base-de-datos",
+    "authors": [
+        {
+            "name": "ahuespi",
+            "email": "amir.huespi@gmail.com"
+        }
+    ],
+    "require": {
+        "mongodb/mongodb": "^1.0.0"
+    }
+}
