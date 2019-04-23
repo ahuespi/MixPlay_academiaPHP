@@ -2,13 +2,20 @@
 require_once './vendor/autoload.php';
 class BaseDeDatos
 {
-    private $fp;
 
+    private $client;
     private $db;
 
     public function __construct()
     {
-        $this->db = new MongoDB\Client("mongodb://localhost:27017");
+        $this->client = new MongoDB\Client("mongodb://localhost:27017");
+        $this->db = $this->client->dbtesting;
+    }
+
+    public function show()
+    {
+        // return $this->db->getDatabaseName();
+        return $this->db->getCollectionName();
     }
 
     public function get($id)
@@ -52,22 +59,16 @@ class BaseDeDatos
 
 }
 
-echo "Connection to database successfully";
-   // select a database
-   $db = $db->dbtesting;
-	
-   echo "Database mydb selected";
-
 $db = new BaseDeDatos();
-var_dump($db); die;
+echo "Base de datos: " . $db->show() . "\n";
 
-$db->insert(1, "amir");
-$db->insert(2, "pepe");
-$db->insert(3, "123123123");
-$db->insert(4, "asdasd");
-$db->update(1, "sd");
-$db->update(2, "1010");
-$db->delete(1, "1010");
-$db->insert(5, "hola");
-echo $db->get(4)."\n";
+// $db->insert(1, "amir");
+// $db->insert(2, "pepe");
+// $db->insert(3, "123123123");
+// $db->insert(4, "asdasd");
+// $db->update(1, "sd");
+// $db->update(2, "1010");
+// $db->delete(1, "1010");
+// $db->insert(5, "hola");
+// echo $db->get(4)."\n";
 
