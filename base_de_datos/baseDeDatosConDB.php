@@ -65,16 +65,6 @@ class BaseDeDatos
             return false;
         }
     }
-    public function deleteAll()
-    {
-        try {
-            $this->collection->dropIndexes();
-            return true;
-        } catch (\Throwable $th) {
-            print_r($th->getMessage());
-            return false;
-        }
-    }
     public function borrarDB()
     {
         $this->collection->drop();

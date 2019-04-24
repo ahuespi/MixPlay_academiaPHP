@@ -11,7 +11,7 @@ final class baseDeDatosTest extends TestCase
 
     public function setUp() : void
     {
-        $this->db = new BaseDeDatos("dbtesting", "tester");
+        $this->db = new BaseDeDatos("dbtesting", "tester".rand(1,10));
     }
 
     public function tearDown() : void
@@ -51,15 +51,6 @@ final class baseDeDatosTest extends TestCase
     {
         $this->assertTrue($this->db->insert(1,'hola'));
         $this->assertFalse($this->db->delete(2));
-    }
-    
-    public function testDeleteAll()
-    {
-        $this->assertTrue($this->db->insert(1,'hola'));
-        $this->assertTrue($this->db->insert(2,'hola'));
-        $this->assertTrue($this->db->insert(3,'hola'));
-        $this->assertTrue($this->db->insert(4,'hola'));
-        $this->assertTrue($this->db->deleteAll());
     }
 
 }
