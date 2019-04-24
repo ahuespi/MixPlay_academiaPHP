@@ -52,11 +52,10 @@ class BaseDeDatos
     public function update ($id,$nombre)
     {
         try {
-            $this->userCollection->replaceOne ([
+            $this->userCollection->updateOne ([
                 '_id' => $id
             ],[
-                '_id' => $id,
-                'name' => $nombre
+                '$set' => ['name' => $nombre]
             ]);
             return true;
         } catch (\Throwable $th) {
@@ -83,7 +82,7 @@ echo "Base de datos: " . $db->show() . "\n";
 
 $db->insert(6, 'pepe');
 
-$db->update(1, "josesin");
+$db->update(1, "pepe");
 
 
 // $db->update(1, "sd");
