@@ -4,41 +4,25 @@
 require_once './vendor/autoload.php';
 class BaseDeDatos
 {
-
-    private $client;
+    private $server;
     private $db;
-    private $userCollection;
+    private $collection;
 
 
-    public function __construct()
+    public function __construct($db_name, $collection_name)
     {
-        $this->client = new MongoDB\Client("mongodb://localhost:27017");
-        // echo "Connection to database successfully \n";
-        $this->db = $this->client->dbtesting;
-        // echo "Database mydb selected \n";
-        $this->userCollection = $this->db->Users;
-        // echo "Collection created succsessfully \n";
-    }
+        $this->server = new MongoDB\Client("mongodb://localhost:27017");
+        
+        $this->db = $this->server->selectDatabase($db_name);
 
-    public function show()
-    {
-        return $this->db->getDatabaseName();
+        $this->collection = $this->db->$collection_name;
 
     }
 
-    public function get($id)
-    {
-        $read = $this->read();
-
-        return $read[$id];
-
-        $this->close($read);
-    }
-    
     public function insert($id,$nombre)
     {
         try {
-            $this->userCollection->insertOne([
+            $this->collection->insertOne([
                 '_id' => $id,
                 'name' => $nombre
             ]);
@@ -46,49 +30,64 @@ class BaseDeDatos
         } catch (Exception $th) {
             return false;
         }
-        
     }
         
     public function update ($id,$nombre)
     {
         try {
-            $this->userCollection->updateOne ([
-                '_id' => $id
-            ],[
-                '$set' => ['name' => $nombre]
-            ]);
-            return true;
+            if($this->collection->findOne(['_id' => $id])){
+                $this->collection->updateOne ([
+                    '_id' => $id
+                ],[
+                    '$set' => ['name' => $nombre]
+                ]);
+                return true;
+            } else {
+                return false;
+            }
         } catch (\Throwable $th) {
-            print_r ( $th->getMessage() );
             return false;
         }
     }
     
     public function delete($id)
     {
-        $this->userCollection->deleteOne([
-            'id' => $id
-        ]);
+        try {
+            if($this->collection->findOne(['_id' => $id])){
+                $this->collection->deleteOne([
+                    '_id' => $id
+                ]);
+                return true;
+            } else {
+                return false;
+            }
+        } catch (\Throwable $th) {
+            return false;
+        }
     }
-    public function deleteAll($id)
+    public function deleteAll()
     {
-        $this->userCollection->deleteMany([$id]);
+        try {
+            $this->collection->dropIndexes();
+            return true;
+        } catch (\Throwable $th) {
+            print_r($th->getMessage());
+            return false;
+        }
+    }
+    public function borrarDB()
+    {
+        $this->collection->drop();
     }
 
 }
 
-$db = new BaseDeDatos();
-echo "Base de datos: " . $db->show() . "\n";
+// $c = new BaseDeDatos('tester', 'testing');
 
-$db->insert(6, 'pepe');
-
-$db->update(1, "pepe");
-
-
-// $db->update(1, "sd");
-// $db->update(2, "1010");
-// $db->delete(2);
-
-// $db->insert(5, "hola");
-// echo $db->get(4)."\n";
-
+// $c->insert(1,"hola");
+// $c->insert(2,"hola");
+// $c->insert(3,"hola");
+// $c->insert(4,"hola");
+// $c->insert(5,"hola");
+// $c->update(4,"pepe");
+// $c->deleteAll();
